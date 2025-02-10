@@ -1,0 +1,160 @@
+Welcome to Mini Chess! Enter moves as 'B2 B3'. Type 'exit' to quit.
+Turn 1
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp  bp   .
+3    .   .   .   .   .
+2    .  wp  wp   .   .
+1    .  wN  wB  wQ  wK
+
+     A   B   C   D   E
+
+Turn 2
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp  bp   .
+3    .   .  wp   .   .
+2    .  wp   .   .   .
+1    .  wN  wB  wQ  wK
+
+     A   B   C   D   E
+
+Captured wp!
+Turn 3
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp   .   .
+3    .   .  bp   .   .
+2    .  wp   .   .   .
+1    .  wN  wB  wQ  wK
+
+     A   B   C   D   E
+
+Turn 4
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp   .   .
+3    .   .  bp   .   .
+2    .  wp  wQ   .   .
+1    .  wN  wB   .  wK
+
+     A   B   C   D   E
+
+Captured wp!
+Turn 5
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp   .   .
+3    .   .   .   .   .
+2    .  bp  wQ   .   .
+1    .  wN  wB   .  wK
+
+     A   B   C   D   E
+
+Turn 6
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp   .   .
+3    .   .   .   .   .
+2    .  bp  wQ   .   .
+1    .  wN  wB  wK   .
+
+     A   B   C   D   E
+
+Invalid move. Try again.
+Turn 6
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp   .   .
+3    .   .   .   .   .
+2    .  bp  wQ   .   .
+1    .  wN  wB  wK   .
+
+     A   B   C   D   E
+
+Invalid move. Try again.
+Turn 6
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp   .   .
+3    .   .   .   .   .
+2    .  bp  wQ   .   .
+1    .  wN  wB  wK   .
+
+     A   B   C   D   E
+
+Turn 7
+
+5   bK   .  bB  bN   .
+4    .  bQ  bp   .   .
+3    .   .   .   .   .
+2    .  bp  wQ   .   .
+1    .  wN  wB  wK   .
+
+     A   B   C   D   E
+
+Turn 8
+
+5   bK   .  bB  bN   .
+4    .  bQ  bp   .   .
+3    .   .  wQ   .   .
+2    .  bp   .   .   .
+1    .  wN  wB  wK   .
+
+     A   B   C   D   E
+
+Captured wQ!
+Turn 9
+
+5   bK   .  bB  bN   .
+4    .   .  bp   .   .
+3    .   .  bQ   .   .
+2    .  bp   .   .   .
+1    .  wN  wB  wK   .
+
+     A   B   C   D   E
+
+Invalid move. Try again.
+Turn 9
+
+5   bK   .  bB  bN   .
+4    .   .  bp   .   .
+3    .   .  bQ   .   .
+2    .  bp   .   .   .
+1    .  wN  wB  wK   .
+
+     A   B   C   D   E
+
+Invalid move. Try again.
+Turn 9
+
+5   bK   .  bB  bN   .
+4    .   .  bp   .   .
+3    .   .  bQ   .   .
+2    .  bp   .   .   .
+1    .  wN  wB  wK   .
+
+     A   B   C   D   E
+
+Turn 10
+
+5   bK   .  bB  bN   .
+4    .   .  bp   .   .
+3    .   .  bQ   .   .
+2    .  bp   .  wK   .
+1    .  wN  wB   .   .
+
+     A   B   C   D   E
+
+Captured wK!
+Black wins in 10 turns!
+Final State:
+
+5   bK   .  bB  bN   .
+4    .   .  bp   .   .
+3    .   .   .   .   .
+2    .  bp   .  bQ   .
+1    .  wN  wB   .   .
+
+     A   B   C   D   E
+
