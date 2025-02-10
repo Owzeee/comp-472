@@ -50,4 +50,4 @@ Comp472-Monarchs
 Group Members
 Ruturajsinh Vihol
 Omar Zaari
-Haytham Hnine
+Leiticia Taleb
