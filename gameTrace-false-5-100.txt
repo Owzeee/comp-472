@@ -1,4 +1,29 @@
+Game Parameters:
+    Timeout: 5 seconds
+    Maximum Turns: 100
+    Play Mode: H-H
+    Search Algorithm: None (Human vs Human)
+
+Game Trace:
 Welcome to Mini Chess! Enter moves as 'B2 B3'. Type 'exit' to quit.
+
+Game Parameters:
+    Timeout: 5 seconds
+    Maximum Turns: 100
+    Play Mode: H-H
+    Search Algorithm: None (Human vs Human)
+
+Initial Board:
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp  bp   .
+3    .   .   .   .   .
+2    .  wp  wp   .   .
+1    .  wN  wB  wQ  wK
+
+     A   B   C   D   E
+
+
 Turn 1
 
 5   bK  bQ  bB  bN   .
@@ -9,152 +34,190 @@ Turn 1
 
      A   B   C   D   E
 
+Invalid move. Pawn can only capture diagonally one square. Try again.
+
+Turn 1
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp  bp   .
+3    .   .   .   .   .
+2    .  wp  wp   .   .
+1    .  wN  wB  wQ  wK
+
+     A   B   C   D   E
+
+White move: from B2 to B3
+
 Turn 2
 
 5   bK  bQ  bB  bN   .
 4    .   .  bp  bp   .
-3    .   .  wp   .   .
-2    .  wp   .   .   .
+3    .  wp   .   .   .
+2    .   .  wp   .   .
 1    .  wN  wB  wQ  wK
 
      A   B   C   D   E
 
+Black move: from C4 to B3
 Captured wp!
+
 Turn 3
 
 5   bK  bQ  bB  bN   .
-4    .   .  bp   .   .
-3    .   .  bp   .   .
-2    .  wp   .   .   .
+4    .   .   .  bp   .
+3    .  bp   .   .   .
+2    .   .  wp   .   .
 1    .  wN  wB  wQ  wK
 
      A   B   C   D   E
+
+White move: from C2 to C3
 
 Turn 4
 
 5   bK  bQ  bB  bN   .
-4    .   .  bp   .   .
-3    .   .  bp   .   .
-2    .  wp  wQ   .   .
-1    .  wN  wB   .  wK
+4    .   .   .  bp   .
+3    .  bp  wp   .   .
+2    .   .   .   .   .
+1    .  wN  wB  wQ  wK
 
      A   B   C   D   E
 
+Black move: from D4 to C3
 Captured wp!
+
 Turn 5
 
 5   bK  bQ  bB  bN   .
-4    .   .  bp   .   .
-3    .   .   .   .   .
-2    .  bp  wQ   .   .
-1    .  wN  wB   .  wK
+4    .   .   .   .   .
+3    .  bp  bp   .   .
+2    .   .   .   .   .
+1    .  wN  wB  wQ  wK
 
      A   B   C   D   E
+
+White move: from B1 to C3
+Captured bp!
 
 Turn 6
 
 5   bK  bQ  bB  bN   .
-4    .   .  bp   .   .
-3    .   .   .   .   .
-2    .  bp  wQ   .   .
-1    .  wN  wB  wK   .
+4    .   .   .   .   .
+3    .  bp  wN   .   .
+2    .   .   .   .   .
+1    .   .  wB  wQ  wK
 
      A   B   C   D   E
 
-Invalid move. Try again.
-Turn 6
-
-5   bK  bQ  bB  bN   .
-4    .   .  bp   .   .
-3    .   .   .   .   .
-2    .  bp  wQ   .   .
-1    .  wN  wB  wK   .
-
-     A   B   C   D   E
-
-Invalid move. Try again.
-Turn 6
-
-5   bK  bQ  bB  bN   .
-4    .   .  bp   .   .
-3    .   .   .   .   .
-2    .  bp  wQ   .   .
-1    .  wN  wB  wK   .
-
-     A   B   C   D   E
+Black move: from D5 to C3
+Captured wN!
 
 Turn 7
 
-5   bK   .  bB  bN   .
-4    .  bQ  bp   .   .
-3    .   .   .   .   .
-2    .  bp  wQ   .   .
-1    .  wN  wB  wK   .
+5   bK  bQ  bB   .   .
+4    .   .   .   .   .
+3    .  bp  bN   .   .
+2    .   .   .   .   .
+1    .   .  wB  wQ  wK
 
      A   B   C   D   E
+
+White move: from C1 to D2
 
 Turn 8
 
-5   bK   .  bB  bN   .
-4    .  bQ  bp   .   .
-3    .   .  wQ   .   .
-2    .  bp   .   .   .
-1    .  wN  wB  wK   .
+5   bK  bQ  bB   .   .
+4    .   .   .   .   .
+3    .  bp  bN   .   .
+2    .   .   .  wB   .
+1    .   .   .  wQ  wK
 
      A   B   C   D   E
 
+Invalid move. Knight moves in an L-shape (2 squares in one direction and 1 in the other). Try again.
+
+Turn 8
+
+5   bK  bQ  bB   .   .
+4    .   .   .   .   .
+3    .  bp  bN   .   .
+2    .   .   .  wB   .
+1    .   .   .  wQ  wK
+
+     A   B   C   D   E
+
+Black move: from C3 to D1
 Captured wQ!
+
 Turn 9
 
-5   bK   .  bB  bN   .
-4    .   .  bp   .   .
-3    .   .  bQ   .   .
-2    .  bp   .   .   .
-1    .  wN  wB  wK   .
+5   bK  bQ  bB   .   .
+4    .   .   .   .   .
+3    .  bp   .   .   .
+2    .   .   .  wB   .
+1    .   .   .  bN  wK
 
      A   B   C   D   E
 
-Invalid move. Try again.
-Turn 9
-
-5   bK   .  bB  bN   .
-4    .   .  bp   .   .
-3    .   .  bQ   .   .
-2    .  bp   .   .   .
-1    .  wN  wB  wK   .
-
-     A   B   C   D   E
-
-Invalid move. Try again.
-Turn 9
-
-5   bK   .  bB  bN   .
-4    .   .  bp   .   .
-3    .   .  bQ   .   .
-2    .  bp   .   .   .
-1    .  wN  wB  wK   .
-
-     A   B   C   D   E
+White move: from E1 to D1
+Captured bN!
 
 Turn 10
 
-5   bK   .  bB  bN   .
-4    .   .  bp   .   .
-3    .   .  bQ   .   .
-2    .  bp   .  wK   .
-1    .  wN  wB   .   .
+5   bK  bQ  bB   .   .
+4    .   .   .   .   .
+3    .  bp   .   .   .
+2    .   .   .  wB   .
+1    .   .   .  wK   .
 
      A   B   C   D   E
 
-Captured wK!
-Black wins in 10 turns!
-Final State:
+Invalid move. Cannot move to a square occupied by your own piece. Try again.
 
-5   bK   .  bB  bN   .
-4    .   .  bp   .   .
-3    .   .   .   .   .
-2    .  bp   .  bQ   .
-1    .  wN  wB   .   .
+Turn 10
+
+5   bK  bQ  bB   .   .
+4    .   .   .   .   .
+3    .  bp   .   .   .
+2    .   .   .  wB   .
+1    .   .   .  wK   .
+
+     A   B   C   D   E
+
+Invalid move. Invalid pawn move. Try again.
+
+Turn 10
+
+5   bK  bQ  bB   .   .
+4    .   .   .   .   .
+3    .  bp   .   .   .
+2    .   .   .  wB   .
+1    .   .   .  wK   .
+
+     A   B   C   D   E
+
+Black move: from C5 to D4
+
+Turn 11
+
+5   bK  bQ   .   .   .
+4    .   .   .  bB   .
+3    .  bp   .   .   .
+2    .   .   .  wB   .
+1    .   .   .  wK   .
+
+     A   B   C   D   E
+
+White move: from D2 to A5
+Captured bK!
+White wins in turn 12!
+Final Board:
+
+5   wB  bQ   .   .   .
+4    .   .   .  bB   .
+3    .  bp   .   .   .
+2    .   .   .   .   .
+1    .   .   .  wK   .
 
      A   B   C   D   E
 
