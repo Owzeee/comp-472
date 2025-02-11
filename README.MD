@@ -96,4 +96,4 @@ python MiniChessSkeletonCode.py
 ### Group: COMP472-Monachs
 * Ruturajsinh Vihol
 * Omar Zaari
-* Leiticia Taleb
+* Leiticia Taleb : 40225167
