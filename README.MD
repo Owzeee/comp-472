@@ -17,7 +17,7 @@ Mini Chess is a simplified chess game played on a 5×5 board. It supports human-
 ### 📋 Board Configuration
 - 5x5 board
 
-### ♟️ Pieces & Movement
+#### ♟️ Pieces & Movement
 - King (K): One square any direction 
 - Queen (Q): Any squares horizontal/vertical/diagonal
 - Bishop (B): Any squares diagonal
