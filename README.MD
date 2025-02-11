@@ -16,13 +16,6 @@ Mini Chess is a simplified chess game played on a 5×5 board. It supports human-
 
 ### 📋 Board Configuration
 - 5x5 board
-- Starting Position:
-5  bK bQ bB bN .
-4  .  .  bp bp .
-3  .  .  .  .  .
-2  .  wp wp .  .
-1  .  wN wB wQ wK
-A  B  C  D  E
 
 ### ♟️ Pieces & Movement
 - King (K): One square any direction 
@@ -45,7 +38,7 @@ A  B  C  D  E
 ### ⚙️ Execution
 ```bash
 python MiniChessSkeletonCode.py
-
+```
 ### 🎮 Commands
 * Move: `<from> <to>` (e.g., `B2 B3`)
 * Exit: `exit`
