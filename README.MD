@@ -1,53 +1,106 @@
-COMP 472 Winter 2025 Project
+<h1 align="center">Mini Chess</h1>
+
+## Overview
+
+Mini Chess is a simplified chess game played on a 5×5 board. It supports human-vs-human gameplay, enforces legal moves for each piece, and logs all moves and game events to a trace file.
+
+<p align="center">
+  <a href="#game-specifications">Specifications</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#current-features">Current Features</a> •
+  <a href="#future-implementations">Future</a> •
+  <a href="#requirements">Requirements</a>
+</p>
+
+## 🎮 Game Specifications
+
+### 📋 Board Configuration
+- 5x5 board
+- Starting Position:
+5  bK bQ bB bN .
+4  .  .  bp bp .
+3  .  .  .  .  .
+2  .  wp wp .  .
+1  .  wN wB wQ wK
+A  B  C  D  E
+
+### ♟️ Pieces & Movement
+- King (K): One square any direction 
+- Queen (Q): Any squares horizontal/vertical/diagonal
+- Bishop (B): Any squares diagonal
+- Knight (N): L-shape (2+1)
+- Pawn (p): 
+  - Forward one square
+  - Captures diagonally
+  - Auto-promotes to Queen at opposite end
+
+### 🏆 Win Conditions
+- Capture opponent's king
+- Draw:
+  - 10 turns without captures
+  - 100 total turns reached
+
+## 🚀 Usage
+
+### ⚙️ Execution
+```bash
+python MiniChessSkeletonCode.py
+
+### 🎮 Commands
+* Move: `<from> <to>` (e.g., `B2 B3`)
+* Exit: `exit`
+
+### 📤 Output
+* File: `gameTrace-false-<timeout>-<maxTurns>.txt`
+* Contents:
+   * Game parameters
+   * Move history
+   * Captures
+   * Outcome
+
+### Current Features (Demo 1)
+* Human vs Human gameplay
+* Move validation
+* Piece movement rules
+* Capture handling
+* Pawn promotion
+* Draw conditions
+* Game trace generation
+* Error handling
+
+### 🔮 Future Implementations (Demo 2+)
+
+#### 🤖 AI Opponent
+* Minimax algorithm
+* Alpha-beta pruning
+* Multiple heuristics (e0, e1, e2)
+
+#### 🎲 Game Modes
+* Human vs AI (H-AI)
+* AI vs Human (AI-H)
+* AI vs AI (AI-AI)
+
+#### Enhanced Statistics
+* States explored
+* Average branching factor
+* Search tree depth metrics
+
+#### Performance Metrics
+* Time per move
+* Memory usage
+* Node expansion rate
+
+### Requirements
+* Python 3.x
+
+### Development Status
+* [x] Demo 1: Manual Game (H-H)
+* [ ] Demo 2: AI Implementation
+* [ ] Tournament Version
+* [ ] Final Release
 
 
-Features
-
-Supports human vs human gameplay.
-
-Implements legal move validation for all pieces.
-
-Detects captures and end-game conditions.
-
-Generates a game trace file to log moves and results.
-
-
-Rules
-
-The game follows standard chess rules with a 5x5 board.
-
-Pieces include King (K), Queen (Q), Bishop (B), Knight (N), and Pawn (p).
-
-Pawns promote upon reaching the last row.
-
-The game ends when a King is captured or after 100 turns.
-
-
-
-Execution
-
-Run the script:
-
-python MiniChess.py
-
-Enter moves using chess notation (B2 B3).
-
-Type exit to quit the game.
-
-
-
-Files
-
-MiniChess.py - Main game logic
-
-gameTrace-*.txt - Stores game history
-
-README.md - Documentation
-
-
-Comp472-Monarchs
-
-Group Members
-Ruturajsinh Vihol
-Omar Zaari
-Leiticia Taleb
+### Group: COMP472-Monachs
+* Ruturajsinh Vihol
+* Omar Zaari
+* Leiticia Taleb
