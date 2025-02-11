@@ -93,7 +93,7 @@ python MiniChessSkeletonCode.py
 * [ ] Final Release
 
 
-### Group: COMP472-Monachs
+### Group: COMP472-Monarchs
 * Ruturajsinh Vihol: 40154693
 * Omar Zaari: 40194212
 * Leiticia Taleb : 40225167
