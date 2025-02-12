@@ -37,7 +37,7 @@ Mini Chess is a simplified chess game played on a 5×5 board. It supports human-
 
 ### ⚙️ Execution
 ```bash
-python MiniChessSkeletonCode.py
+python MonarchsMiniChessCode.py
 ```
 ### 🎮 Commands
 * Move: `<from> <to>` (e.g., `B2 B3`)
