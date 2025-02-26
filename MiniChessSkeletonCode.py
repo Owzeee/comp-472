@@ -1,34 +1,34 @@
+import re
+import time
 import copy
 
 class MiniChess:
-    def __init__(self):
-        # Initialize the game state and configuration parameters
-        self.current_game_state = self.init_board()
-        self.currentTurn = 0                # Counts each move (each player's turn)
-        self.turnsSinceCapture = 0          # Counts consecutive turns with no capture (for draw condition)
-        self.winFlag = False                # Flag to indicate if a win has occurred
-        self.fileOutput = ""                # String to capture all output for the game trace
-        self.maxTurns = 100                 # Maximum number of turns allowed (game ends in a draw if reached)
-        self.timeout = 5                    # Timeout for each move (hardcoded for H-H; not used in H-H mode)
-        self.playMode = "H-H"               # Play mode: Human vs Human
+    # Constants
+    BOARD_SIZE = 5
+    MAX_TURNS = 100         # Maximum half-moves (each valid move counts as one turn)
+    FULL_TURNS_FOR_DRAW = 10  # 10 full turns (i.e. 20 half-moves) without a capture results in a draw
+    MOVES_FOR_DRAW = FULL_TURNS_FOR_DRAW * 2  # 20 half-moves without capture
 
-    def printG(self, output):
-        """
-        Capture outputs for gameTrace and also print to the console.
-        """
-        self.fileOutput += output + "\n"
-        print(output)    
+    def __init__(self):
+        # Initialize game state and parameters.
+        self.current_game_state = self.init_board()
+        self.current_turn = 0  # Counts half-moves (each valid move counts)
+        self.half_moves_since_capture = 0
+        self.win_flag = False
+        self.file_output = ""
+        self.timeout = 5  # Maximum allowed time (in seconds) for an AI move.
+        
+        # Default settings; these will be updated by user input.
+        self.play_mode = "H-H"  # A string summarizing the overall mode.
+        # Dictionary to define each player's type: "human" or "ai".
+        self.player_types = {"white": "human", "black": "human"}
+        
+        # AI algorithm settings:
+        self.use_alpha_beta = False  # If True, use alpha-beta pruning; if False, plain minimax.
+        self.heuristic_choice = "e0"   # Choose among "e0", "e1", or "e2" for board evaluation.
 
     def init_board(self):
-        """
-        Initialize the board with the starting configuration.
-        Board layout:
-            Row 5: bK, bQ, bB, bN, .
-            Row 4: ., ., bp, bp, .
-            Row 3: ., ., ., ., .
-            Row 2: ., wp, wp, ., .
-            Row 1: ., wN, wB, wQ, wK
-        """
+        """Initialize 5x5 board with starting positions."""
         return {
             "board": [
                 ['bK', 'bQ', 'bB', 'bN', '.'],
@@ -37,271 +37,503 @@ class MiniChess:
                 ['.', 'wp', 'wp', '.', '.'],
                 ['.', 'wN', 'wB', 'wQ', 'wK']
             ],
-            "turn": 'white',
+            "turn": 'white'  # White always starts.
         }
 
+    def print_game(self, output):
+        """Record and display game output (to both command line and trace log)."""
+        self.file_output += output + "\n"
+        print(output)
+
     def display_board(self, game_state):
-        """
-        Prints the current board state in a text-based format.
-        """
-        self.printG("")
-        # Print rows in reverse order (row 5 at the top, row 1 at the bottom)
+        """Display current board state with row numbers and column labels."""
+        self.print_game("")
+        # Display board so that board row 0 appears as row 5, row 4 as row 1.
         for i, row in enumerate(game_state["board"], start=1):
-            self.printG(str(6 - i) + "  " + ' '.join(piece.rjust(3) for piece in row))
-        self.printG("\n     A   B   C   D   E\n")
+            self.print_game(f"{self.BOARD_SIZE + 1 - i}  {' '.join(piece.rjust(3) for piece in row)}")
+        self.print_game("\n     A   B   C   D   E\n")
 
-    def is_valid_move(self, game_state, move):
+    def convert_coordinate(self, coord):
         """
-        Check if the move is valid according to Mini Chess rules.
-        It verifies:
-          - The move's start and end coordinates are within bounds.
-          - The starting square is not empty.
-          - The player is moving their own piece.
-          - The destination square is not occupied by the player's own piece.
-          - The move conforms to piece-specific movement rules.
+        Convert board coordinate tuple (row, col) to algebraic notation.
+        For example, (4, 0) becomes "A1" and (0, 4) becomes "E5".
         """
-        start, end = move
-        start_row, start_col = start
-        end_row, end_col = end
-        board = game_state["board"]
-        
-        # Check if start position is within board bounds
-        if not (0 <= start_row < 5 and 0 <= start_col < 5):
-            return False
-        
-        # Check if end position is within board bounds
-        if not (0 <= end_row < 5 and 0 <= end_col < 5):
-            return False
-        
-        piece = board[start_row][start_col]
-
-        # Prevent moving an empty square
-        if piece == '.':
-            return False  
-
-        # Prevent moving the opponent's piece
-        if (game_state["turn"] == 'white' and 'b' in piece) or (game_state["turn"] == 'black' and 'w' in piece):
-            return False  
-
-        # Prevent capturing one's own piece
-        if board[end_row][end_col] != '.' and board[end_row][end_col][0] == piece[0]:
-            return False  
-
-        piece_type = piece[1]
-
-        # Movement validation based on the piece type
-        if piece_type == 'K':  # King moves one step in any direction
-            return abs(start_row - end_row) <= 1 and abs(start_col - end_col) <= 1
-        elif piece_type == 'Q':  # Queen moves either linearly or diagonally
-            return self.is_valid_linear_move(board, start, end) or self.is_valid_diagonal_move(board, start, end)
-        elif piece_type == 'B':  # Bishop moves diagonally
-            return self.is_valid_diagonal_move(board, start, end)
-        elif piece_type == 'N':  # Knight moves in an L-shape
-            return (abs(start_row - end_row), abs(start_col - end_col)) in [(2, 1), (1, 2)]
-        elif piece_type == 'p':  # Pawn movement: one square forward or diagonal capture
-            direction = -1 if game_state["turn"] == 'white' else 1
-            # Pawn forward move (non-capturing)
-            if start_col == end_col and board[end_row][end_col] == '.':  
-                return end_row == start_row + direction
-            # Pawn capturing move (diagonally)
-            elif abs(start_col - end_col) == 1 and end_row == start_row + direction:
-                return board[end_row][end_col] != '.' and board[end_row][end_col][0] != piece[0]
-        return False  
-
-    def is_valid_linear_move(self, board, start, end):
-        """
-        Checks if a linear (horizontal or vertical) move is valid by ensuring no obstacles are in the path.
-        """
-        start_row, start_col = start
-        end_row, end_col = end
-
-        if start_row == end_row or start_col == end_col:
-            row_step = 0 if start_row == end_row else (1 if end_row > start_row else -1)
-            col_step = 0 if start_col == end_col else (1 if end_col > start_col else -1)
-            current_row, current_col = start_row + row_step, start_col + col_step
-
-            while (current_row, current_col) != (end_row, end_col):
-                if board[current_row][current_col] != '.':
-                    return False  # The path is blocked.
-                current_row += row_step
-                current_col += col_step
-            return True
-        return False
-
-    def is_valid_diagonal_move(self, board, start, end):
-        """
-        Checks if a diagonal move is valid by ensuring no obstacles are in the diagonal path.
-        """
-        start_row, start_col = start
-        end_row, end_col = end
-
-        if abs(start_row - end_row) == abs(start_col - end_col):
-            row_step = 1 if end_row > start_row else -1
-            col_step = 1 if end_col > start_col else -1
-            current_row, current_col = start_row + row_step, start_col + col_step
-
-            while (current_row, current_col) != (end_row, end_col):
-                if board[current_row][current_col] != '.':
-                    return False  # The path is blocked.
-                current_row += row_step
-                current_col += col_step
-            return True
-        return False
-
-    def make_move(self, game_state, move):
-        """
-        Updates the board by making the given move.
-          - Handles piece movement.
-          - Performs captures and prints a message.
-          - Declares win if a king is captured.
-          - Handles pawn promotion.
-          - Updates the capture counter.
-        """
-        start, end = move
-        start_row, start_col = start
-        end_row, end_col = end
-        board = game_state["board"]
-        piece = board[start_row][start_col]
-        captured = False  # Flag to track if a capture occurred during this move.
-
-        # Handle capturing if the destination square is occupied.
-        if board[end_row][end_col] != '.':
-            self.printG(f"Captured {board[end_row][end_col]}!")
-            captured = True
-            # Check if the captured piece is a king.
-            if board[end_row][end_col][1] == 'K':
-                self.printG(f"{game_state['turn'].capitalize()} wins in {self.currentTurn + 1} turns!")
-                self.winFlag = True
-
-        # Move the piece from the source to the destination.
-        board[start_row][start_col] = '.'
-        
-        # Pawn promotion: if a pawn reaches the far end, promote it to a queen.
-        if piece[1] == 'p' and (end_row == 0 or end_row == 4):
-            piece = piece[0] + 'Q'
-        
-        board[end_row][end_col] = piece
-        # Switch turn to the other player if the game has not ended.
-        game_state["turn"] = "black" if game_state["turn"] == "white" else "white"
-        
-        # Update capture counter: reset if a capture occurred, else increment.
-        if captured:
-            self.turnsSinceCapture = 0
-        else:
-            self.turnsSinceCapture += 1
-
-        return game_state
+        row, col = coord
+        return f"{chr(col + ord('A'))}{self.BOARD_SIZE - row}"
 
     def parse_input(self, move):
         """
-        Parses the input string (e.g., "B2 B3") into board coordinates.
-        Includes additional bounds checking to ensure valid positions (A-E, 1-5).
-        Returns:
-            A tuple of coordinates: ((start_row, start_col), (end_row, end_col))
-            or None if the input is malformed or out of bounds.
+        Parse the input string using a regular expression to ensure the format is correct.
+        Expected format is like "B2 B3" (letters A-E and digits 1-5).
+        Returns a tuple ((start_row, start_col), (end_row, end_col)) or None if malformed.
         """
+        move = move.strip()
+        pattern = r'^[A-Ea-e][1-5]\s+[A-Ea-e][1-5]$'
+        if not re.match(pattern, move):
+            return None
         try:
-            start, end = move.split()
-            # Validate the length and content for start coordinate.
-            if len(start) != 2 or len(end) != 2:
-                return None
-            start_letter = start[0].upper()
-            start_digit = start[1]
-            if start_letter < 'A' or start_letter > 'E' or not start_digit.isdigit() or not (1 <= int(start_digit) <= 5):
-                return None
-            # Validate the end coordinate.
-            end_letter = end[0].upper()
-            end_digit = end[1]
-            if end_letter < 'A' or end_letter > 'E' or not end_digit.isdigit() or not (1 <= int(end_digit) <= 5):
-                return None
-
-            # Convert the input (e.g., "B2") into board indices.
-            start_coord = (5 - int(start_digit), ord(start_letter) - ord('A'))
-            end_coord = (5 - int(end_digit), ord(end_letter) - ord('A'))
+            tokens = move.split()
+            start, end = tokens[0], tokens[1]
+            start_letter, start_digit = start[0].upper(), start[1]
+            end_letter, end_digit = end[0].upper(), end[1]
+            start_coord = (self.BOARD_SIZE - int(start_digit), ord(start_letter) - ord('A'))
+            end_coord = (self.BOARD_SIZE - int(end_digit), ord(end_letter) - ord('A'))
             return start_coord, end_coord
-        except Exception as e:
+        except Exception:
             return None
 
-    def gameTrace(self):
+    def validate_move(self, game_state, move):
         """
-        Generates the game trace file.
-        The trace file includes game parameters (timeout, max turns, play mode, etc.)
-        and a move-by-move log of the game.
-        The file name follows the format: gameTrace-false-<timeout>-<maxTurns>.txt
+        Validate the move and return a tuple (is_valid, error_message).
+        Provides detailed feedback if the move is invalid.
         """
-        filename = f"gameTrace-false-{self.timeout}-{self.maxTurns}.txt"
-        with open(filename, 'w') as f:
-            f.write("Game Parameters:\n")
-            f.write(f"    Timeout: {self.timeout} seconds\n")
-            f.write(f"    Maximum Turns: {self.maxTurns}\n")
-            f.write(f"    Play Mode: {self.playMode}\n")
-            f.write("    Search Algorithm: None (Human vs Human)\n")
-            f.write("\nGame Trace:\n")
-            f.write(self.fileOutput)
-        print(f"\nGame Trace generated: {filename}")
+        if move is None:
+            return False, "Move format incorrect. Please use the format 'B2 B3'."
+
+        start, end = move
+        start_row, start_col = start
+        end_row, end_col = end
+        board = game_state["board"]
+
+        if not self.is_within_bounds(start_row, start_col):
+            return False, "Starting coordinate out of bounds."
+        if not self.is_within_bounds(end_row, end_col):
+            return False, "Destination coordinate out of bounds."
+
+        piece = board[start_row][start_col]
+        if piece == '.':
+            return False, "No piece at the starting square."
+
+        current_turn = game_state["turn"]
+        if current_turn == 'white' and piece[0] != 'w':
+            return False, "It's white's turn, but the selected piece is not white."
+        if current_turn == 'black' and piece[0] != 'b':
+            return False, "It's black's turn, but the selected piece is not black."
+
+        target = board[end_row][end_col]
+        if target != '.' and target[0] == piece[0]:
+            return False, "Cannot move to a square occupied by your own piece."
+
+        # Validate movement based on the type of piece.
+        piece_type = piece[1]
+        if piece_type == 'K':  # King moves one square any direction.
+            if abs(start_row - end_row) <= 1 and abs(start_col - end_col) <= 1:
+                return True, ""
+            else:
+                return False, "King can only move one square in any direction."
+        elif piece_type == 'Q':  # Queen moves linearly or diagonally.
+            if self.is_valid_linear_move(board, start, end) or self.is_valid_diagonal_move(board, start, end):
+                return True, ""
+            else:
+                return False, "Queen must move in a straight line or diagonally with no obstacles."
+        elif piece_type == 'B':  # Bishop moves diagonally.
+            if self.is_valid_diagonal_move(board, start, end):
+                return True, ""
+            else:
+                return False, "Bishop can only move diagonally with no obstacles."
+        elif piece_type == 'N':  # Knight moves in an L-shape.
+            if (abs(start_row - end_row), abs(start_col - end_col)) in [(2, 1), (1, 2)]:
+                return True, ""
+            else:
+                return False, "Knight moves in an L-shape (2 squares in one direction and 1 in the other)."
+        elif piece_type == 'p':  # Pawn: forward move or diagonal capture.
+            direction = -1 if current_turn == 'white' else 1
+            # Forward move
+            if start_col == end_col:
+                if end_row == start_row + direction and board[end_row][end_col] == '.':
+                    return True, ""
+                else:
+                    return False, "Pawn can only move forward one square into an empty space."
+            # Diagonal capture
+            elif abs(start_col - end_col) == 1 and end_row == start_row + direction:
+                if board[end_row][end_col] != '.' and board[end_row][end_col][0] != piece[0]:
+                    return True, ""
+                else:
+                    return False, "Pawn can only capture diagonally one square."
+            else:
+                return False, "Invalid pawn move."
+        else:
+            return False, "Unknown piece type encountered."
+
+    def is_within_bounds(self, row, col):
+        """Check if the given coordinates are within board bounds."""
+        return 0 <= row < self.BOARD_SIZE and 0 <= col < self.BOARD_SIZE
+
+    def is_valid_linear_move(self, board, start, end):
+        """Validate straight-line (horizontal or vertical) movement."""
+        start_row, start_col = start
+        end_row, end_col = end
+
+        # Must be in the same row or same column.
+        if start_row != end_row and start_col != end_col:
+            return False
+
+        row_step = 0 if start_row == end_row else (1 if end_row > start_row else -1)
+        col_step = 0 if start_col == end_col else (1 if end_col > start_col else -1)
+
+        current_row = start_row + row_step
+        current_col = start_col + col_step
+
+        while (current_row, current_col) != (end_row, end_col):
+            if board[current_row][current_col] != '.':
+                return False
+            current_row += row_step
+            current_col += col_step
+        return True
+
+    def is_valid_diagonal_move(self, board, start, end):
+        """Validate diagonal movement."""
+        start_row, start_col = start
+        end_row, end_col = end
+
+        if abs(start_row - end_row) != abs(start_col - end_col):
+            return False
+
+        row_step = 1 if end_row > start_row else -1
+        col_step = 1 if end_col > start_col else -1
+
+        current_row = start_row + row_step
+        current_col = start_col + col_step
+
+        while (current_row, current_col) != (end_row, end_col):
+            if board[current_row][current_col] != '.':
+                return False
+            current_row += row_step
+            current_col += col_step
+        return True
+
+    def get_all_valid_moves(self, game_state):
+        """
+        Generate and return a list of all valid moves for the current player.
+        This is used by the AI search to explore possible moves.
+        """
+        moves = []
+        board = game_state["board"]
+        current_turn = game_state["turn"]
+        for i in range(self.BOARD_SIZE):
+            for j in range(self.BOARD_SIZE):
+                piece = board[i][j]
+                if piece != '.' and ((current_turn == 'white' and piece[0] == 'w') or (current_turn == 'black' and piece[0] == 'b')):
+                    for x in range(self.BOARD_SIZE):
+                        for y in range(self.BOARD_SIZE):
+                            move = ((i, j), (x, y))
+                            valid, _ = self.validate_move(game_state, move)
+                            if valid:
+                                moves.append(move)
+        return moves
+
+    def is_game_over(self, game_state):
+        """
+        Check if the game is over by ensuring that both kings are still on the board.
+        """
+        board = game_state["board"]
+        kings = 0
+        for row in board:
+            for piece in row:
+                if piece != '.' and piece[1] == 'K':
+                    kings += 1
+        return kings < 2
+
+    def evaluate_board(self, game_state):
+        """
+        Evaluate the board using the selected heuristic.
+        Three heuristics are available:
+            - e0: (#wp + 3*#wB + 3*#wN + 9*#wQ + 999*#wK) -
+                  (#bp + 3*#bB + 3*#bN + 9*#bQ + 999*#bK)
+            - e1 and e2 are variations; here we make simple adjustments.
+        """
+        board = game_state["board"]
+        white_value = 0
+        black_value = 0
+        for row in board:
+            for piece in row:
+                if piece == '.':
+                    continue
+                color = piece[0]
+                p_type = piece[1]
+                # Define base weights for pieces.
+                if self.heuristic_choice == "e0":
+                    weights = {'p': 1, 'B': 3, 'N': 3, 'Q': 9, 'K': 999}
+                elif self.heuristic_choice == "e1":
+                    weights = {'p': 1, 'B': 3, 'N': 3, 'Q': 9, 'K': 900}  # Slightly lower king weight.
+                elif self.heuristic_choice == "e2":
+                    weights = {'p': 1, 'B': 3, 'N': 3, 'Q': 9, 'K': 1200}  # Slightly higher king weight.
+                else:
+                    weights = {'p': 1, 'B': 3, 'N': 3, 'Q': 9, 'K': 999}
+
+                if color == 'w':
+                    white_value += weights.get(p_type, 0)
+                else:
+                    black_value += weights.get(p_type, 0)
+        return white_value - black_value
+
+    def minimax(self, game_state, depth, maximizing, alpha, beta, start_time, time_limit, current_depth=0):
+        """
+        Minimax search with optional alpha-beta pruning.
+        - game_state: current game state.
+        - depth: remaining search depth.
+        - maximizing: True if the current layer is maximizing, False if minimizing.
+        - alpha, beta: values for alpha-beta pruning.
+        - start_time and time_limit: used to enforce the move time limit.
+        - current_depth: current search depth (for statistics, if needed).
+        Returns a tuple (best_move, best_score).
+        """
+        # Check time limit.
+        if time.time() - start_time > time_limit:
+            return None, self.evaluate_board(game_state)
+        if depth == 0 or self.is_game_over(game_state):
+            return None, self.evaluate_board(game_state)
+
+        valid_moves = self.get_all_valid_moves(game_state)
+        best_move = None
+
+        if maximizing:
+            value = float('-inf')
+            for move in valid_moves:
+                new_state = copy.deepcopy(game_state)
+                self.make_move(new_state, move)
+                _, score = self.minimax(new_state, depth - 1, False, alpha, beta, start_time, time_limit, current_depth + 1)
+                if score > value:
+                    value = score
+                    best_move = move
+                if self.use_alpha_beta:
+                    alpha = max(alpha, value)
+                    if beta <= alpha:
+                        break
+            return best_move, value
+        else:
+            value = float('inf')
+            for move in valid_moves:
+                new_state = copy.deepcopy(game_state)
+                self.make_move(new_state, move)
+                _, score = self.minimax(new_state, depth - 1, True, alpha, beta, start_time, time_limit, current_depth + 1)
+                if score < value:
+                    value = score
+                    best_move = move
+                if self.use_alpha_beta:
+                    beta = min(beta, value)
+                    if beta <= alpha:
+                        break
+            return best_move, value
+
+    def ai_move(self, game_state):
+        """
+        Determine the best move for the AI using iterative deepening with minimax (and optional alpha-beta).
+        Returns a tuple (best_move, best_score, move_time).
+        Also, logs the time taken and the minimax evaluation score.
+        """
+        start_time = time.time()
+        time_limit = self.timeout
+        current_player = game_state["turn"]
+        # For our evaluation function, white is maximizing and black is minimizing.
+        maximizing = True if current_player == 'white' else False
+
+        best_move = None
+        best_score = None
+        depth = 1
+
+        # Iterative deepening until time runs out or a maximum depth is reached.
+        while True:
+            current_time = time.time()
+            if current_time - start_time > time_limit:
+                break
+            move, score = self.minimax(game_state, depth, maximizing, float('-inf'), float('inf'), start_time, time_limit)
+            if move is not None:
+                best_move = move
+                best_score = score
+            depth += 1
+            # Limit the maximum search depth to avoid long computations on this small board.
+            if depth > 5:
+                break
+
+        move_time = time.time() - start_time
+        return best_move, best_score, move_time
+
+    def make_move(self, game_state, move):
+        """
+        Execute the move, update the board, handle captures and pawn promotions,
+        and switch turns. Returns a flag indicating if pawn promotion occurred.
+        """
+        start, end = move
+        start_row, start_col = start
+        end_row, end_col = end
+        board = game_state["board"]
+        piece = board[start_row][start_col]
+        captured = False
+
+        # Check for capture.
+        if board[end_row][end_col] != '.':
+            captured_piece = board[end_row][end_col]
+            self.print_game(f"Captured {captured_piece}!")
+            captured = True
+            if captured_piece[1] == 'K':
+                self.print_game(f"{game_state['turn'].capitalize()} wins in turn {self.current_turn + 1}!")
+                self.win_flag = True
+
+        board[start_row][start_col] = '.'
+
+        # Handle pawn promotion:
+        # For white, promotion when reaching row index 0; for black, row index BOARD_SIZE-1.
+        promotion = False
+        if piece[1] == 'p' and ((game_state["turn"] == 'white' and end_row == 0) or
+                                (game_state["turn"] == 'black' and end_row == self.BOARD_SIZE - 1)):
+            piece = piece[0] + 'Q'
+            promotion = True
+
+        board[end_row][end_col] = piece
+
+        # Switch turn: note that we log the move before switching.
+        game_state["turn"] = "black" if game_state["turn"] == "white" else "white"
+
+        # Update no-capture counter (each valid move is a half-move).
+        if captured:
+            self.half_moves_since_capture = 0
+        else:
+            self.half_moves_since_capture += 1
+
+        return promotion
+
+    def generate_game_trace(self):
+        """
+        Generate the game trace file with game parameters and move-by-move log.
+        The filename follows the format: gameTrace-<b>-<t>-<m>.txt
+        where b is 'true' if alpha-beta is active, otherwise 'false'.
+        """
+        alpha_beta_flag = "true" if self.use_alpha_beta else "false"
+        filename = f"gameTrace-{alpha_beta_flag}-{self.timeout}-{self.MAX_TURNS}.txt"
+        try:
+            with open(filename, 'w') as f:
+                f.write("Game Parameters:\n")
+                f.write(f"    Timeout: {self.timeout} seconds\n")
+                f.write(f"    Maximum Turns: {self.MAX_TURNS}\n")
+                # Log individual player types.
+                f.write(f"    Player 1 (white): {self.player_types['white']}\n")
+                f.write(f"    Player 2 (black): {self.player_types['black']}\n")
+                f.write(f"    Alpha-Beta: {alpha_beta_flag}\n")
+                # If a player is an AI, also log the heuristic in use.
+                f.write(f"    Heuristic: {self.heuristic_choice}\n\n")
+                f.write("Game Trace:\n")
+                f.write(self.file_output)
+            self.print_game(f"\nGame Trace generated: {filename}")
+        except IOError:
+            self.print_game("Error: Unable to write game trace.")
 
     def play(self):
-        """
-        Main game loop.
-          - Displays the board.
-          - Prompts for moves.
-          - Checks for invalid moves.
-          - Increments the turn counter.
-          - Checks for win condition (king captured).
-          - Checks for draw conditions:
-                a) Maximum number of turns reached.
-                b) No capture for 10 consecutive turns.
-          - Writes the game trace to a file when the game ends.
-        """
-        self.printG("Welcome to Mini Chess! Enter moves as 'B2 B3'. Type 'exit' to quit.")
-        
-        # Print initial game parameters and board configuration in the trace.
-        self.printG("Game Parameters:")
-        self.printG(f"    Timeout: {self.timeout} seconds")
-        self.printG(f"    Maximum Turns: {self.maxTurns}")
-        self.printG(f"    Play Mode: {self.playMode}")
-        self.printG("    Search Algorithm: None (Human vs Human)")
-        self.printG("\nInitial Board:")
+        """Main game loop supporting human and AI moves."""
+        # Log game parameters and initial board configuration.
+        self.print_game("Welcome to Mini Chess! Enter moves as 'B2 B3'. Type 'exit' to quit.")
+        self.print_game("\nGame Parameters:")
+        self.print_game(f"    Timeout: {self.timeout} seconds")
+        self.print_game(f"    Maximum Turns: {self.MAX_TURNS}")
+        self.print_game(f"    Play Mode: {self.play_mode}")
+        self.print_game(f"    Player 1 (white): {self.player_types['white']}")
+        self.print_game(f"    Player 2 (black): {self.player_types['black']}")
+        self.print_game(f"    Alpha-Beta: {self.use_alpha_beta}")
+        self.print_game(f"    Heuristic: {self.heuristic_choice}")
+        self.print_game("\nInitial Board:")
         self.display_board(self.current_game_state)
-        
+
         while True:
-            self.printG(f"Turn {self.currentTurn + 1}")
+            self.print_game(f"\nTurn {self.current_turn + 1}")
             self.display_board(self.current_game_state)
 
-            move = input(f"{self.current_game_state['turn'].capitalize()} to move: ")
-            if move.lower() == 'exit':
-                self.printG("Game exited by user.")
-                break
-
-            move_coords = self.parse_input(move)
-            if not move_coords or not self.is_valid_move(self.current_game_state, move_coords):
-                self.printG("Invalid move. Try again.")
-                continue  
+            current_player = self.current_game_state["turn"]
+            # Decide whether the move comes from a human or from AI.
+            if self.player_types[current_player] == "human":
+                move_input = input(f"{current_player.capitalize()} to move: ").strip()
+                if move_input.lower() == 'exit':
+                    self.print_game("Game exited by user.")
+                    break
+                move_coords = self.parse_input(move_input)
+                valid, error_msg = self.validate_move(self.current_game_state, move_coords)
+                if not valid:
+                    self.print_game("Invalid move. " + error_msg + " Try again.")
+                    continue
+                chosen_move = move_coords
+                move_time = None  # Not applicable for human moves.
+                # Log the move details in algebraic notation.
+                start_coord, end_coord = move_coords
+                self.print_game(f"{current_player.capitalize()} move: from {self.convert_coordinate(start_coord)} to {self.convert_coordinate(end_coord)}")
+            else:
+                # AI move.
+                self.print_game(f"{current_player.capitalize()} (AI) is thinking...")
+                chosen_move, ai_score, move_time = self.ai_move(self.current_game_state)
+                if chosen_move is None:
+                    self.print_game("AI could not find a valid move. Game over.")
+                    break
+                start_coord, end_coord = chosen_move
+                self.print_game(f"{current_player.capitalize()} (AI) move: from {self.convert_coordinate(start_coord)} to {self.convert_coordinate(end_coord)}")
+                self.print_game(f"Time for this action: {move_time:.2f} sec")
+                self.print_game(f"Minimax/Alpha-Beta search score: {ai_score}")
 
             # Increment turn count after a valid move.
-            self.currentTurn += 1
-            self.current_game_state = self.make_move(self.current_game_state, move_coords)
+            self.current_turn += 1
+            promotion = self.make_move(self.current_game_state, chosen_move)
+            if promotion:
+                self.print_game(f"Pawn promoted to Queen at {self.convert_coordinate(end_coord)}!")
 
-            # Check for win condition: if a king was captured.
-            if self.winFlag:
-                self.printG("Final Board:")
+            # For AI moves, also log the heuristic score of the resulting board.
+            if self.player_types[current_player] == "ai":
+                post_move_eval = self.evaluate_board(self.current_game_state)
+                self.print_game(f"Heuristic score of the resulting board: {post_move_eval}")
+
+            # Check win condition.
+            if self.win_flag:
+                self.print_game("Final Board:")
                 self.display_board(self.current_game_state)
-                self.gameTrace()
+                self.generate_game_trace()
                 break
 
-            # Draw condition: Maximum number of turns reached.
-            if self.currentTurn >= self.maxTurns:
-                self.printG("Maximum number of turns reached. Game is a draw.")
-                self.gameTrace()
+            # Check maximum moves condition.
+            if self.current_turn >= self.MAX_TURNS:
+                self.print_game("Maximum number of moves reached. Game is a draw.")
+                self.generate_game_trace()
                 break
 
-            # Draw condition: No capture in 10 consecutive turns.
-            if self.turnsSinceCapture >= 10:
-                self.printG("No captures in 10 consecutive turns. Game is a draw.")
-                self.gameTrace()
+            # Check draw condition: 10 full turns (20 half-moves) with no capture.
+            if self.half_moves_since_capture >= self.MOVES_FOR_DRAW:
+                self.print_game("No captures in 10 full turns (20 moves). Game is a draw.")
+                self.generate_game_trace()
                 break
 
 if __name__ == "__main__":
     game = MiniChess()
-    game.play()
+    # Allow the user to select the play mode.
+    print("Select play mode:")
+    print("1: Human vs Human")
+    print("2: Human vs AI")
+    print("3: AI vs AI")
+    mode_choice = input("Enter 1, 2, or 3: ").strip()
 
+    if mode_choice == "1":
+        game.play_mode = "H-H"
+        game.player_types = {"white": "human", "black": "human"}
+    elif mode_choice == "2":
+        game.play_mode = "H-AI"
+        # Ask which side the human wants to play.
+        side_choice = input("Do you want to play as White (W) or Black (B)? ").strip().lower()
+        if side_choice == "w" or side_choice == "white":
+            game.player_types = {"white": "human", "black": "ai"}
+        else:
+            game.player_types = {"white": "ai", "black": "human"}
+    elif mode_choice == "3":
+        game.play_mode = "AI-AI"
+        game.player_types = {"white": "ai", "black": "ai"}
+    else:
+        print("Invalid selection. Defaulting to Human vs Human.")
+        game.play_mode = "H-H"
+        game.player_types = {"white": "human", "black": "human"}
+
+    # Optionally, you can also prompt for AI settings here.
+    # For example, ask if alpha-beta pruning should be used:
+    ab_choice = input("Use alpha-beta pruning? (y/n): ").strip().lower()
+    game.use_alpha_beta = True if ab_choice == "y" or ab_choice == "yes" else False
+
+    # Ask which heuristic to use (e0, e1, or e2).
+    heuristic_choice = input("Select heuristic (e0, e1, or e2): ").strip().lower()
+    if heuristic_choice in ["e0", "e1", "e2"]:
+        game.heuristic_choice = heuristic_choice
+    else:
+        game.heuristic_choice = "e0"
+
+    game.play()
