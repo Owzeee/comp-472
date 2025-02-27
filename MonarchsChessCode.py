@@ -26,6 +26,12 @@ class MiniChess:
         # AI algorithm settings:
         self.use_alpha_beta = False  # If True, use alpha-beta pruning; if False, plain minimax.
         self.heuristic_choice = "e0"   # Choose among "e0", "e1", or "e2" for board evaluation.
+        
+        # --- New counters for AI cumulative statistics ---
+        self.ai_states_explored = 0         # Total nodes explored in the AI search
+        self.ai_depth_explored = {}         # Dictionary: depth -> count of nodes at that depth
+        self.total_branching_sum = 0        # Sum of valid moves at nodes where branching occurs
+        self.total_branches_count = 0       # Count of nodes that produced a branching factor
 
     def init_board(self):
         """Initialize 5x5 board with starting positions."""
@@ -164,7 +170,6 @@ class MiniChess:
         start_row, start_col = start
         end_row, end_col = end
 
-        # Must be in the same row or same column.
         if start_row != end_row and start_col != end_col:
             return False
 
@@ -205,7 +210,7 @@ class MiniChess:
     def get_all_valid_moves(self, game_state):
         """
         Generate and return a list of all valid moves for the current player.
-        This is used by the AI search to explore possible moves.
+        Used by the AI search.
         """
         moves = []
         board = game_state["board"]
@@ -224,7 +229,7 @@ class MiniChess:
 
     def is_game_over(self, game_state):
         """
-        Check if the game is over by ensuring that both kings are still on the board.
+        Check if the game is over (if one of the kings is missing).
         """
         board = game_state["board"]
         kings = 0
@@ -237,10 +242,10 @@ class MiniChess:
     def evaluate_board(self, game_state):
         """
         Evaluate the board using the selected heuristic.
-        Three heuristics are available:
-            - e0: (#wp + 3*#wB + 3*#wN + 9*#wQ + 999*#wK) -
-                  (#bp + 3*#bB + 3*#bN + 9*#bQ + 999*#bK)
-            - e1 and e2 are variations; here we make simple adjustments.
+        Heuristic weights:
+            e0: Pawn=1, Bishop=3, Knight=3, Queen=9, King=999
+            e1: same as e0, but King=900
+            e2: same as e0, but King=1200
         """
         board = game_state["board"]
         white_value = 0
@@ -269,14 +274,28 @@ class MiniChess:
     def minimax(self, game_state, depth, maximizing, alpha, beta, start_time, time_limit, current_depth=0):
         """
         Minimax search with optional alpha-beta pruning.
-        Returns a tuple (best_move, best_score).
+        Also, collects cumulative AI statistics:
+         - Increments total nodes explored.
+         - Records nodes explored per depth.
+         - Accumulates branching factor info.
+        Returns (best_move, best_score).
         """
+        # Increment total state count and per-depth count.
+        self.ai_states_explored += 1
+        self.ai_depth_explored[current_depth] = self.ai_depth_explored.get(current_depth, 0) + 1
+
+        # If at this node we generate moves, record the branching factor.
+        valid_moves = self.get_all_valid_moves(game_state)
+        if valid_moves:
+            branching = len(valid_moves)
+            self.total_branching_sum += branching
+            self.total_branches_count += 1
+
         if time.time() - start_time > time_limit:
             return None, self.evaluate_board(game_state)
         if depth == 0 or self.is_game_over(game_state):
             return None, self.evaluate_board(game_state)
 
-        valid_moves = self.get_all_valid_moves(game_state)
         best_move = None
 
         if maximizing:
@@ -311,8 +330,15 @@ class MiniChess:
     def ai_move(self, game_state):
         """
         Determine the best move for the AI using iterative deepening with minimax.
+        Resets and then collects cumulative statistics during search.
         Returns (best_move, best_score, move_time).
         """
+        # Reset AI statistics.
+        self.ai_states_explored = 0
+        self.ai_depth_explored = {}
+        self.total_branching_sum = 0
+        self.total_branches_count = 0
+
         start_time = time.time()
         time_limit = self.timeout
         current_player = game_state["turn"]
@@ -342,7 +368,7 @@ class MiniChess:
         and switch turns.
         If simulate is True, do not update global win_flag.
         If suppress_output is True, do not print output.
-        Returns a flag indicating if pawn promotion occurred.
+        Returns True if a pawn promotion occurred.
         """
         start, end = move
         start_row, start_col = start
@@ -356,7 +382,6 @@ class MiniChess:
             if not suppress_output:
                 self.print_game(f"Captured {captured_piece}!")
             captured = True
-            # Only update win_flag if this is a real move (not a simulation).
             if not simulate and captured_piece[1] == 'K':
                 if not suppress_output:
                     self.print_game(f"{game_state['turn'].capitalize()} wins in turn {self.current_turn + 1}!")
@@ -378,6 +403,30 @@ class MiniChess:
             self.half_moves_since_capture += 1
 
         return promotion
+
+    def get_ai_stats(self):
+        """
+        Return a string containing cumulative AI statistics:
+          - Total states explored.
+          - States explored by depth.
+          - Percentage breakdown by depth.
+          - Average branching factor.
+        """
+        stats = []
+        stats.append(f"Cumulative states explored: {self.ai_states_explored}")
+        stats.append("States explored by depth:")
+        for depth in sorted(self.ai_depth_explored.keys()):
+            count = self.ai_depth_explored[depth]
+            stats.append(f"  Depth {depth}: {count}")
+        total = self.ai_states_explored
+        stats.append("Percentage of states by depth:")
+        for depth in sorted(self.ai_depth_explored.keys()):
+            count = self.ai_depth_explored[depth]
+            percentage = (count / total * 100) if total > 0 else 0
+            stats.append(f"  Depth {depth}: {percentage:.1f}%")
+        avg_branching = (self.total_branching_sum / self.total_branches_count) if self.total_branches_count > 0 else 0
+        stats.append(f"Average branching factor: {avg_branching:.2f}")
+        return "\n".join(stats)
 
     def generate_game_trace(self):
         """
@@ -444,6 +493,9 @@ class MiniChess:
                 self.print_game(f"{current_player.capitalize()} (AI) move: from {self.convert_coordinate(start_coord)} to {self.convert_coordinate(end_coord)}")
                 self.print_game(f"Time for this action: {move_time:.2f} sec")
                 self.print_game(f"Minimax/Alpha-Beta search score: {ai_score}")
+                # Also print cumulative AI statistics.
+                self.print_game("Cumulative AI statistics:")
+                self.print_game(self.get_ai_stats())
 
             self.current_turn += 1
             promotion = self.make_move(self.current_game_state, chosen_move)
