@@ -1,0 +1,799 @@
+Game Parameters:
+    Timeout: 5 seconds
+    Maximum Turns: 100
+    Player 1 (white): ai
+    Player 2 (black): ai
+    Alpha-Beta: true
+    Heuristic: e1
+
+Game Trace:
+Welcome to Mini Chess! Enter moves as 'B2 B3'. Type 'exit' to quit.
+
+Game Parameters:
+    Timeout: 5 seconds
+    Maximum Turns: 100
+    Play Mode: AI-AI
+    Player 1 (white): ai
+    Player 2 (black): ai
+    Alpha-Beta: True
+    Heuristic: e1
+
+Initial Board:
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp  bp   .
+3    .   .   .   .   .
+2    .  wp  wp   .   .
+1    .  wN  wB  wQ  wK
+
+     A   B   C   D   E
+
+
+Turn 1
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp  bp   .
+3    .   .   .   .   .
+2    .  wp  wp   .   .
+1    .  wN  wB  wQ  wK
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from C2 to C3
+Time for this action: 1.11 sec
+Minimax/Alpha-Beta search score: 2
+Cumulative AI statistics:
+Cumulative states explored: 17467
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 65
+  Depth 2: 231
+  Depth 3: 1205
+  Depth 4: 3639
+  Depth 5: 12322
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.4%
+  Depth 2: 1.3%
+  Depth 3: 6.9%
+  Depth 4: 20.8%
+  Depth 5: 70.5%
+Average branching factor: 15.27
+Heuristic score of the resulting board: 0
+
+Turn 2
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp  bp   .
+3    .   .  wp   .   .
+2    .  wp   .   .   .
+1    .  wN  wB  wQ  wK
+
+     A   B   C   D   E
+
+Black (AI) is thinking...
+Black (AI) move: from D4 to D3
+Time for this action: 2.01 sec
+Minimax/Alpha-Beta search score: -2
+Cumulative AI statistics:
+Cumulative states explored: 33824
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 65
+  Depth 2: 358
+  Depth 3: 1738
+  Depth 4: 6141
+  Depth 5: 25517
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.2%
+  Depth 2: 1.1%
+  Depth 3: 5.1%
+  Depth 4: 18.2%
+  Depth 5: 75.4%
+Average branching factor: 15.43
+Heuristic score of the resulting board: 0
+
+Turn 3
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp   .   .
+3    .   .  wp  bp   .
+2    .  wp   .   .   .
+1    .  wN  wB  wQ  wK
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from B1 to A3
+Time for this action: 2.15 sec
+Minimax/Alpha-Beta search score: 0
+Cumulative AI statistics:
+Cumulative states explored: 35181
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 65
+  Depth 2: 417
+  Depth 3: 2047
+  Depth 4: 9511
+  Depth 5: 23136
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.2%
+  Depth 2: 1.2%
+  Depth 3: 5.8%
+  Depth 4: 27.0%
+  Depth 5: 65.8%
+Average branching factor: 15.47
+Heuristic score of the resulting board: 0
+
+Turn 4
+
+5   bK  bQ  bB  bN   .
+4    .   .  bp   .   .
+3   wN   .  wp  bp   .
+2    .  wp   .   .   .
+1    .   .  wB  wQ  wK
+
+     A   B   C   D   E
+
+Black (AI) is thinking...
+Black (AI) move: from C5 to A3
+Time for this action: 1.75 sec
+Minimax/Alpha-Beta search score: -3
+Cumulative AI statistics:
+Cumulative states explored: 28814
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 70
+  Depth 2: 310
+  Depth 3: 1962
+  Depth 4: 5786
+  Depth 5: 20681
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.2%
+  Depth 2: 1.1%
+  Depth 3: 6.8%
+  Depth 4: 20.1%
+  Depth 5: 71.8%
+Average branching factor: 14.38
+Captured wN!
+Heuristic score of the resulting board: -3
+
+Turn 5
+
+5   bK  bQ   .  bN   .
+4    .   .  bp   .   .
+3   bB   .  wp  bp   .
+2    .  wp   .   .   .
+1    .   .  wB  wQ  wK
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from B2 to A3
+Time for this action: 0.75 sec
+Minimax/Alpha-Beta search score: 1
+Cumulative AI statistics:
+Cumulative states explored: 12880
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 60
+  Depth 2: 160
+  Depth 3: 1076
+  Depth 4: 2654
+  Depth 5: 8925
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.5%
+  Depth 2: 1.2%
+  Depth 3: 8.4%
+  Depth 4: 20.6%
+  Depth 5: 69.3%
+Average branching factor: 13.90
+Captured bB!
+Heuristic score of the resulting board: 0
+
+Turn 6
+
+5   bK  bQ   .  bN   .
+4    .   .  bp   .   .
+3   wp   .  wp  bp   .
+2    .   .   .   .   .
+1    .   .  wB  wQ  wK
+
+     A   B   C   D   E
+
+Black (AI) is thinking...
+Black (AI) move: from D5 to C3
+Time for this action: 1.42 sec
+Minimax/Alpha-Beta search score: -9
+Cumulative AI statistics:
+Cumulative states explored: 27468
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 60
+  Depth 2: 257
+  Depth 3: 1634
+  Depth 4: 4387
+  Depth 5: 21125
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.2%
+  Depth 2: 0.9%
+  Depth 3: 5.9%
+  Depth 4: 16.0%
+  Depth 5: 76.9%
+Average branching factor: 13.70
+Captured wp!
+Heuristic score of the resulting board: -1
+
+Turn 7
+
+5   bK  bQ   .   .   .
+4    .   .  bp   .   .
+3   wp   .  bN  bp   .
+2    .   .   .   .   .
+1    .   .  wB  wQ  wK
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from D1 to D2
+Time for this action: 1.76 sec
+Minimax/Alpha-Beta search score: -1
+Cumulative AI statistics:
+Cumulative states explored: 34818
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 60
+  Depth 2: 422
+  Depth 3: 1737
+  Depth 4: 10409
+  Depth 5: 22185
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.2%
+  Depth 2: 1.2%
+  Depth 3: 5.0%
+  Depth 4: 29.9%
+  Depth 5: 63.7%
+Average branching factor: 16.12
+Heuristic score of the resulting board: -1
+
+Turn 8
+
+5   bK  bQ   .   .   .
+4    .   .  bp   .   .
+3   wp   .  bN  bp   .
+2    .   .   .  wQ   .
+1    .   .  wB   .  wK
+
+     A   B   C   D   E
+
+Black (AI) is thinking...
+Black (AI) move: from B5 to E5
+Time for this action: 0.61 sec
+Minimax/Alpha-Beta search score: -9
+Cumulative AI statistics:
+Cumulative states explored: 13082
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 85
+  Depth 2: 164
+  Depth 3: 1210
+  Depth 4: 2215
+  Depth 5: 9403
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.6%
+  Depth 2: 1.3%
+  Depth 3: 9.2%
+  Depth 4: 16.9%
+  Depth 5: 71.9%
+Average branching factor: 15.52
+Heuristic score of the resulting board: -1
+
+Turn 9
+
+5   bK   .   .   .  bQ
+4    .   .  bp   .   .
+3   wp   .  bN  bp   .
+2    .   .   .  wQ   .
+1    .   .  wB   .  wK
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from D2 to E3
+Time for this action: 1.28 sec
+Minimax/Alpha-Beta search score: -1
+Cumulative AI statistics:
+Cumulative states explored: 26033
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 60
+  Depth 2: 493
+  Depth 3: 1617
+  Depth 4: 9227
+  Depth 5: 14631
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.2%
+  Depth 2: 1.9%
+  Depth 3: 6.2%
+  Depth 4: 35.4%
+  Depth 5: 56.2%
+Average branching factor: 15.94
+Heuristic score of the resulting board: -1
+
+Turn 10
+
+5   bK   .   .   .  bQ
+4    .   .  bp   .   .
+3   wp   .  bN  bp  wQ
+2    .   .   .   .   .
+1    .   .  wB   .  wK
+
+     A   B   C   D   E
+
+Black (AI) is thinking...
+Black (AI) move: from E5 to B5
+Time for this action: 1.83 sec
+Minimax/Alpha-Beta search score: -4
+Cumulative AI statistics:
+Cumulative states explored: 39640
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 90
+  Depth 2: 336
+  Depth 3: 2439
+  Depth 4: 5085
+  Depth 5: 31685
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.2%
+  Depth 2: 0.8%
+  Depth 3: 6.2%
+  Depth 4: 12.8%
+  Depth 5: 79.9%
+Average branching factor: 14.71
+Heuristic score of the resulting board: -1
+
+Turn 11
+
+5   bK  bQ   .   .   .
+4    .   .  bp   .   .
+3   wp   .  bN  bp  wQ
+2    .   .   .   .   .
+1    .   .  wB   .  wK
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from E3 to D4
+Time for this action: 1.47 sec
+Minimax/Alpha-Beta search score: 0
+Cumulative AI statistics:
+Cumulative states explored: 29370
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 65
+  Depth 2: 334
+  Depth 3: 1610
+  Depth 4: 10330
+  Depth 5: 17026
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.2%
+  Depth 2: 1.1%
+  Depth 3: 5.5%
+  Depth 4: 35.2%
+  Depth 5: 58.0%
+Average branching factor: 16.03
+Heuristic score of the resulting board: -1
+
+Turn 12
+
+5   bK  bQ   .   .   .
+4    .   .  bp  wQ   .
+3   wp   .  bN  bp   .
+2    .   .   .   .   .
+1    .   .  wB   .  wK
+
+     A   B   C   D   E
+
+Black (AI) is thinking...
+Black (AI) move: from D3 to D2
+Time for this action: 3.28 sec
+Minimax/Alpha-Beta search score: -3
+Cumulative AI statistics:
+Cumulative states explored: 71029
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 90
+  Depth 2: 497
+  Depth 3: 4016
+  Depth 4: 9360
+  Depth 5: 57061
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.1%
+  Depth 2: 0.7%
+  Depth 3: 5.7%
+  Depth 4: 13.2%
+  Depth 5: 80.3%
+Average branching factor: 15.15
+Heuristic score of the resulting board: -1
+
+Turn 13
+
+5   bK  bQ   .   .   .
+4    .   .  bp  wQ   .
+3   wp   .  bN   .   .
+2    .   .   .  bp   .
+1    .   .  wB   .  wK
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from E1 to D2
+Time for this action: 5.00 sec
+Minimax/Alpha-Beta search score: 1
+Cumulative AI statistics:
+Cumulative states explored: 104385
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 75
+  Depth 2: 759
+  Depth 3: 4010
+  Depth 4: 48061
+  Depth 5: 51475
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.1%
+  Depth 2: 0.7%
+  Depth 3: 3.8%
+  Depth 4: 46.0%
+  Depth 5: 49.3%
+Average branching factor: 17.03
+Captured bp!
+Heuristic score of the resulting board: 0
+
+Turn 14
+
+5   bK  bQ   .   .   .
+4    .   .  bp  wQ   .
+3   wp   .  bN   .   .
+2    .   .   .  wK   .
+1    .   .  wB   .   .
+
+     A   B   C   D   E
+
+Black (AI) is thinking...
+Black (AI) move: from C3 to A2
+Time for this action: 4.70 sec
+Minimax/Alpha-Beta search score: -2
+Cumulative AI statistics:
+Cumulative states explored: 102068
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 85
+  Depth 2: 558
+  Depth 3: 4352
+  Depth 4: 14534
+  Depth 5: 82534
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.1%
+  Depth 2: 0.5%
+  Depth 3: 4.3%
+  Depth 4: 14.2%
+  Depth 5: 80.9%
+Average branching factor: 16.97
+Heuristic score of the resulting board: 0
+
+Turn 15
+
+5   bK  bQ   .   .   .
+4    .   .  bp  wQ   .
+3   wp   .   .   .   .
+2   bN   .   .  wK   .
+1    .   .  wB   .   .
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from C1 to B2
+Time for this action: 2.60 sec
+Minimax/Alpha-Beta search score: 1
+Cumulative AI statistics:
+Cumulative states explored: 57418
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 95
+  Depth 2: 696
+  Depth 3: 3277
+  Depth 4: 17227
+  Depth 5: 36118
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.2%
+  Depth 2: 1.2%
+  Depth 3: 5.7%
+  Depth 4: 30.0%
+  Depth 5: 62.9%
+Average branching factor: 15.88
+Heuristic score of the resulting board: 0
+
+Turn 16
+
+5   bK  bQ   .   .   .
+4    .   .  bp  wQ   .
+3   wp   .   .   .   .
+2   bN  wB   .  wK   .
+1    .   .   .   .   .
+
+     A   B   C   D   E
+
+Black (AI) is thinking...
+Black (AI) move: from B5 to B2
+Time for this action: 1.85 sec
+Minimax/Alpha-Beta search score: -2
+Cumulative AI statistics:
+Cumulative states explored: 43630
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 65
+  Depth 2: 335
+  Depth 3: 2746
+  Depth 4: 7044
+  Depth 5: 33435
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.1%
+  Depth 2: 0.8%
+  Depth 3: 6.3%
+  Depth 4: 16.1%
+  Depth 5: 76.6%
+Average branching factor: 17.96
+Captured wB!
+Heuristic score of the resulting board: -3
+
+Turn 17
+
+5   bK   .   .   .   .
+4    .   .  bp  wQ   .
+3   wp   .   .   .   .
+2   bN  bQ   .  wK   .
+1    .   .   .   .   .
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from D4 to B2
+Time for this action: 2.88 sec
+Minimax/Alpha-Beta search score: 1
+Cumulative AI statistics:
+Cumulative states explored: 63099
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 90
+  Depth 2: 639
+  Depth 3: 3366
+  Depth 4: 19142
+  Depth 5: 39857
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.1%
+  Depth 2: 1.0%
+  Depth 3: 5.3%
+  Depth 4: 30.3%
+  Depth 5: 63.2%
+Average branching factor: 16.86
+Captured bQ!
+Heuristic score of the resulting board: 6
+
+Turn 18
+
+5   bK   .   .   .   .
+4    .   .  bp   .   .
+3   wp   .   .   .   .
+2   bN  wQ   .  wK   .
+1    .   .   .   .   .
+
+     A   B   C   D   E
+
+Black (AI) is thinking...
+Black (AI) move: from C4 to C3
+Time for this action: 0.28 sec
+Minimax/Alpha-Beta search score: 1
+Cumulative AI statistics:
+Cumulative states explored: 8137
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 35
+  Depth 2: 252
+  Depth 3: 615
+  Depth 4: 2985
+  Depth 5: 4245
+Percentage of states by depth:
+  Depth 0: 0.1%
+  Depth 1: 0.4%
+  Depth 2: 3.1%
+  Depth 3: 7.6%
+  Depth 4: 36.7%
+  Depth 5: 52.2%
+Average branching factor: 13.22
+Heuristic score of the resulting board: 6
+
+Turn 19
+
+5   bK   .   .   .   .
+4    .   .   .   .   .
+3   wp   .  bp   .   .
+2   bN  wQ   .  wK   .
+1    .   .   .   .   .
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from B2 to C3
+Time for this action: 0.71 sec
+Minimax/Alpha-Beta search score: 1
+Cumulative AI statistics:
+Cumulative states explored: 21814
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 90
+  Depth 2: 336
+  Depth 3: 2037
+  Depth 4: 4170
+  Depth 5: 15176
+Percentage of states by depth:
+  Depth 0: 0.0%
+  Depth 1: 0.4%
+  Depth 2: 1.5%
+  Depth 3: 9.3%
+  Depth 4: 19.1%
+  Depth 5: 69.6%
+Average branching factor: 8.91
+Captured bp!
+Heuristic score of the resulting board: 7
+
+Turn 20
+
+5   bK   .   .   .   .
+4    .   .   .   .   .
+3   wp   .  wQ   .   .
+2   bN   .   .  wK   .
+1    .   .   .   .   .
+
+     A   B   C   D   E
+
+Black (AI) is thinking...
+Black (AI) move: from A2 to C3
+Time for this action: 0.17 sec
+Minimax/Alpha-Beta search score: 0
+Cumulative AI statistics:
+Cumulative states explored: 5647
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 30
+  Depth 2: 178
+  Depth 3: 512
+  Depth 4: 2546
+  Depth 5: 2376
+Percentage of states by depth:
+  Depth 0: 0.1%
+  Depth 1: 0.5%
+  Depth 2: 3.2%
+  Depth 3: 9.1%
+  Depth 4: 45.1%
+  Depth 5: 42.1%
+Average branching factor: 12.35
+Captured wQ!
+Heuristic score of the resulting board: -2
+
+Turn 21
+
+5   bK   .   .   .   .
+4    .   .   .   .   .
+3   wp   .  bN   .   .
+2    .   .   .  wK   .
+1    .   .   .   .   .
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from D2 to C3
+Time for this action: 0.04 sec
+Minimax/Alpha-Beta search score: 1
+Cumulative AI statistics:
+Cumulative states explored: 1770
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 45
+  Depth 2: 86
+  Depth 3: 324
+  Depth 4: 556
+  Depth 5: 754
+Percentage of states by depth:
+  Depth 0: 0.3%
+  Depth 1: 2.5%
+  Depth 2: 4.9%
+  Depth 3: 18.3%
+  Depth 4: 31.4%
+  Depth 5: 42.6%
+Average branching factor: 8.68
+Captured bN!
+Heuristic score of the resulting board: 1
+
+Turn 22
+
+5   bK   .   .   .   .
+4    .   .   .   .   .
+3   wp   .  wK   .   .
+2    .   .   .   .   .
+1    .   .   .   .   .
+
+     A   B   C   D   E
+
+Black (AI) is thinking...
+Black (AI) move: from A5 to B5
+Time for this action: 0.02 sec
+Minimax/Alpha-Beta search score: 1
+Cumulative AI statistics:
+Cumulative states explored: 1165
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 15
+  Depth 2: 64
+  Depth 3: 186
+  Depth 4: 384
+  Depth 5: 511
+Percentage of states by depth:
+  Depth 0: 0.4%
+  Depth 1: 1.3%
+  Depth 2: 5.5%
+  Depth 3: 16.0%
+  Depth 4: 33.0%
+  Depth 5: 43.9%
+Average branching factor: 6.61
+Heuristic score of the resulting board: 1
+
+Turn 23
+
+5    .  bK   .   .   .
+4    .   .   .   .   .
+3   wp   .  wK   .   .
+2    .   .   .   .   .
+1    .   .   .   .   .
+
+     A   B   C   D   E
+
+White (AI) is thinking...
+White (AI) move: from C3 to B3
+Time for this action: 0.04 sec
+Minimax/Alpha-Beta search score: 9
+Cumulative AI statistics:
+Cumulative states explored: 2126
+States explored by depth:
+  Depth 0: 5
+  Depth 1: 45
+  Depth 2: 96
+  Depth 3: 351
+  Depth 4: 495
+  Depth 5: 1134
+Percentage of states by depth:
+  Depth 0: 0.2%
+  Depth 1: 2.1%
+  Depth 2: 4.5%
+  Depth 3: 16.5%
+  Depth 4: 23.3%
+  Depth 5: 53.3%
+Average branching factor: 5.64
+Heuristic score of the resulting board: 1
+No captures in 10 full turns (20 moves). Game is a draw.
